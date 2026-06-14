@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createWriteGate } from "./writeGate.js";
+import type { Tool } from "@modelcontextprotocol/sdk/types.js";
 
 describe("createWriteGate", () => {
   const WRITE_TOOLS = new Set([
@@ -44,11 +45,27 @@ describe("createWriteGate", () => {
   });
 
   describe("filterTools", () => {
-    const mockTools = [
-      { name: "bing_ads_update_campaign", description: "Update campaign" },
-      { name: "bing_ads_list_campaigns", description: "List campaigns" },
-      { name: "bing_ads_pause_keyword", description: "Pause keyword" },
-      { name: "bing_ads_get_performance", description: "Get performance" },
+    const mockTools: Tool[] = [
+      {
+        name: "bing_ads_update_campaign",
+        description: "Update campaign",
+        inputSchema: { type: "object" },
+      },
+      {
+        name: "bing_ads_list_campaigns",
+        description: "List campaigns",
+        inputSchema: { type: "object" },
+      },
+      {
+        name: "bing_ads_pause_keyword",
+        description: "Pause keyword",
+        inputSchema: { type: "object" },
+      },
+      {
+        name: "bing_ads_get_performance",
+        description: "Get performance",
+        inputSchema: { type: "object" },
+      },
     ];
 
     it("returns all tools when write is enabled", () => {

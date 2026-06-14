@@ -1,5 +1,3 @@
-import { Tool } from "@modelcontextprotocol/sdk/types.js";
-
 export interface WriteGateConfig {
   writeTools: ReadonlySet<string>;
   envPrefix: string; // e.g. "BING_ADS" → checks BING_ADS_MCP_WRITE
@@ -17,11 +15,11 @@ export function createWriteGate(config: WriteGateConfig) {
       return env[envVarName] === "true";
     },
 
-    filterTools(tools: Tool[], env: NodeJS.ProcessEnv = process.env): Tool[] {
+    filterTools<T extends { name: string }>(tools: readonly T[], env: NodeJS.ProcessEnv = process.env): T[] {
       if (this.isWriteEnabled(env)) {
-        return tools;
+        return Array.from(tools);
       }
-      return tools.filter((tool) => !this.isWriteTool(tool.name));
+      return Array.from(tools).filter((tool) => !this.isWriteTool(tool.name));
     },
 
     assertWriteAllowed(toolName: string, env: NodeJS.ProcessEnv = process.env): void {
