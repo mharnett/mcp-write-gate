@@ -12,7 +12,9 @@ export function createWriteGate(config: WriteGateConfig) {
     },
 
     isWriteEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
-      return env[envVarName] === "true";
+      const value = env[envVarName];
+      if (!value) return false;
+      return ["true", "1", "yes"].includes(value.toLowerCase().trim());
     },
 
     filterTools<T extends { name: string }>(tools: readonly T[], env: NodeJS.ProcessEnv = process.env): T[] {

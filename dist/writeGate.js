@@ -5,7 +5,10 @@ export function createWriteGate(config) {
             return config.writeTools.has(toolName);
         },
         isWriteEnabled(env = process.env) {
-            return env[envVarName] === "true";
+            const value = env[envVarName];
+            if (!value)
+                return false;
+            return ["true", "1", "yes"].includes(value.toLowerCase().trim());
         },
         filterTools(tools, env = process.env) {
             if (this.isWriteEnabled(env)) {
