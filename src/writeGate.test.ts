@@ -37,10 +37,20 @@ describe("createWriteGate", () => {
       expect(gate.isWriteEnabled(env)).toBe(false);
     });
 
-    it("returns false when env var is set to any value other than 'true'", () => {
-      expect(gate.isWriteEnabled({ BING_ADS_MCP_WRITE: "1" })).toBe(false);
-      expect(gate.isWriteEnabled({ BING_ADS_MCP_WRITE: "yes" })).toBe(false);
+    it("accepts the documented truthy synonyms (true/1/yes), case-insensitive", () => {
+      // Contract shared with every consuming MCP (e.g. mcp-google-ads, whose own
+      // tests require "1" -> true). Keep in lockstep with the impl's accept-list.
+      expect(gate.isWriteEnabled({ BING_ADS_MCP_WRITE: "1" })).toBe(true);
+      expect(gate.isWriteEnabled({ BING_ADS_MCP_WRITE: "yes" })).toBe(true);
+      expect(gate.isWriteEnabled({ BING_ADS_MCP_WRITE: "TRUE" })).toBe(true);
+      expect(gate.isWriteEnabled({ BING_ADS_MCP_WRITE: " true " })).toBe(true);
+    });
+
+    it("returns false for non-enabling values", () => {
       expect(gate.isWriteEnabled({ BING_ADS_MCP_WRITE: "false" })).toBe(false);
+      expect(gate.isWriteEnabled({ BING_ADS_MCP_WRITE: "0" })).toBe(false);
+      expect(gate.isWriteEnabled({ BING_ADS_MCP_WRITE: "no" })).toBe(false);
+      expect(gate.isWriteEnabled({ BING_ADS_MCP_WRITE: "maybe" })).toBe(false);
     });
   });
 
