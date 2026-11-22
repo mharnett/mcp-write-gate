@@ -5,6 +5,9 @@
   "description": "Shared MCP utility for gating write operations with environment variable controls",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "mcp-write-gate-proxy": "dist/proxyCli.js"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -17,6 +20,7 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest",
+    "pretest:run": "npm run build",
     "test:run": "vitest run",
     "verify:secrets": "npm run build && node scripts/verify-no-npm-token.mjs"
   },
